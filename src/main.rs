@@ -10,14 +10,42 @@ use chrono::prelude::*;
 use chrono::DateTime;
 use chrono::Utc;
 
+mod request;
+mod parser;
+
+use request::Request;
+use parser::AkamaiParser;
+
+//mod parser;
+
+
+
 #[allow(dead_code)]
-struct Request {
-    date: DateTime<Utc>,
-    path: String,
-    query: String,
-    status: String,
-    size: u32
-}
+// struct Simulation
+// {
+//     cacheTTL: u32,
+//     hits: u64,
+//     misses: u64,
+//     stales: u64
+// }
+
+// impl Simulation 
+// {
+//     pub fn simulate(request:Request) {
+
+//     }
+// }
+
+
+// struct Parser {}
+
+// impl Parser() 
+// {
+//     pub fn parse(filename:String) {
+
+//     }
+// }
+
 
 // fn parserow(String:row):
 //         if len(row) >= 10 and row[4] == "GET":
@@ -57,12 +85,12 @@ struct Request {
 
 //2017-07-31 03:37:39 81.132.178.144 - GET /entity/search/v1/skyqstb/home/4101/1/user/programme/e7d0db18-48af-4f1b-ab1c-340f16ea59f7 src=linear&src=svod&src=cup&src=store&src=est&flag=uhd 200 1100 SkyQ_STB/5.99.04.18;%2032B061
 
+
+
 fn main() {
 	let args: Vec<_> = env::args().collect();
 	let files: &[String] = &args[1..];
     let mut processed = 0;
-
-    //let parser = Regex::new(r"(\d{4})-(\d{2})-(\d{2}) (\d{2})-(\d{2})-(\d{2}) [0-9\.]+ - ([A-Z]+) ([^ ]+) ([^ ]+) (\d+) (\d+) ([^ ]+)").unwrap();
 
     for filename in files {
     	println!("Loading {} ...", filename);
@@ -85,6 +113,13 @@ fn main() {
                           .and_hms(timestr[..2].parse::<u32>().unwrap(),
                                    timestr[3..5].parse::<u32>().unwrap(),
                                    timestr[6..8].parse::<u32>().unwrap());
+                let req = request::Request {
+                    date:date,
+                    query: row[1].to_string(),
+                    path: row[1].to_string(),
+                    status: 200,
+                    size: 100
+                };
 
               /*  println!("{}, {} time: {} url:{} {}?{} size:{}", 
                     date, row[0], row[1], row[4], row[5], row[6], row[7]);*/
@@ -100,6 +135,8 @@ fn main() {
 
     	//let x = parsefile(filename.to_string());
         println!("done");
+
+        let x = parser::AkamaiParser {};
 	}
 
 }
